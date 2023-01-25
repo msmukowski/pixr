@@ -1,14 +1,14 @@
 import click
+from typing import Any
 
-@click.command(help='Resize an animated GIF')
-@click.argument('command')
-@click.option('--verbose', '-v', help='Enable verbose output', is_flag=True)
-@click.option('--downscale', type=bool, help='Downscale GIF format')
-def parse_command(command, verbose, downscale) -> dict:
-    if command == 'resize':
-        return {
-            'verbose': verbose,
-            'dowscale': downscale,
-        }
+ACCEPTED_COMMANDS = ("resize", "rescale")
+
+def parse_command(command: str, **kwargs: dict[str, Any]) -> dict:
+    _validate_command(command)
+    return
+
+
+def _validate_command(command: str) -> None:
+    if not command in ACCEPTED_COMMANDS:
+        raise KeyError(f"Given command: '{command}' is not allowed! Allowed commands: {ACCEPTED_COMMANDS}.")
     
-    raise NotImplementedError("Only one command is permitted: 'resize'")
