@@ -1,9 +1,17 @@
 from typing import Any
 
+from pydantic import BaseModel, ValidationError
+
 ACCEPTED_COMMANDS = ("resize", "rescale")
 
 
+class CmdOptions(BaseModel):
+    verbose: bool
+    percentage: int
+
+
 def parse_command(command: str, **kwargs: dict[str, Any]) -> dict:
+    cmd_options = CmdOptions(**kwargs)
     _validate_command(command)
     return
 
