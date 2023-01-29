@@ -15,3 +15,9 @@ class TooManyCommandArguments(Exception):
     """Custom error that is raised when the number of command arguments is larger than one."""
 
     ...
+
+
+class NoSuchArgument(Exception):
+    """Custom error that is raised when the input argument doesn't exist"""
+
+    ...

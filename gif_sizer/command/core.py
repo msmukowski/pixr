@@ -4,7 +4,11 @@ from typing import Any, Optional
 
 from pydantic import BaseModel, root_validator, validator
 
-from gif_sizer.command.exceptions import PercentageRangeError, TooManyCommandArguments
+from gif_sizer.command.exceptions import (
+    NoSuchArgument,
+    PercentageRangeError,
+    TooManyCommandArguments,
+)
 
 
 class CmdArgument(BaseModel):
@@ -18,11 +22,26 @@ class CmdArgument(BaseModel):
     @classmethod
     def max_one_argument_check(cls, values: dict[str, Any]) -> dict[str, Any]:
         """Make sure that only one argument was given"""
-        if len(values.keys()) > 1:
+        argument_count = len(values.keys())
+
+        if argument_count > 1:
             raise TooManyCommandArguments(
                 "A maximum of one command argument is allowed!"
             )
 
+        return values
+
+    @root_validator(pre=True)
+    @classmethod
+    def field_affiliation_valid(cls, values: dict[str, Any]) -> dict[str, Any]:
+        """Make sure that only one argument was given"""
+        valid_arguments = set(cls.__fields__.keys())
+        mismatched_argument = set(values.keys()).difference(valid_arguments)
+
+        if mismatched_argument:
+            raise NoSuchArgument(
+                f"No such argument: '{mismatched_argument}'! Should be one of: {valid_arguments}"
+            )
         return values
 
     @cached_property
@@ -41,10 +60,10 @@ class CmdOptions(BaseModel):
     def percentage_valid(cls, value: int) -> None:
         """Validator to check whether the percentage value is valid"""
 
-        def range_inclusive(start: int, stop: int):
-            return range(start, stop + 1)
+        def permissible_range(start: int, stop: int):
+            return range(start + 1, stop + 1)
 
-        if value not in range_inclusive(0, 100):
+        if value not in permissible_range(0, 100):
             raise PercentageRangeError(value)
 
 

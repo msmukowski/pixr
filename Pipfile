@@ -13,6 +13,8 @@ black = "*"
 isort = "*"
 flake8 = "*"
 mypy = "*"
+pytest = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.9"
