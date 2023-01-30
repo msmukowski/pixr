@@ -26,6 +26,16 @@ class TestExpectedBehaviour:
         command = Command(cmd_argument, cmd_options)
         assert command
 
+    @pytest.mark.parametrize(
+        "argument, expected_value",
+        [
+            (CmdArgument(resize="resize"), "resize"),
+            (CmdArgument(resize="rescale"), "rescale"),
+        ],
+    )
+    def test_cmd_argument_value(self, argument: CmdArgument, expected_value: str):
+        assert argument.value == expected_value
+
 
 class TestUnexpectedBehaviour:
     @pytest.fixture(params=ACCEPTED_ARGUMENTS)
