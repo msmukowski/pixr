@@ -22,9 +22,11 @@ def cmd_options(request) -> CmdOptions:
 
 
 class TestExpectedBehaviour:
-    def test_from_cli(self, cmd_argument, cmd_options):
-        command = Command(cmd_argument, cmd_options)
-        assert command
+    def test_from_cli(self, cmd_argument: CmdArgument, cmd_options: CmdOptions):
+        command = Command.from_cli(cmd_argument.value, cmd_options.dict())
+        expected_cmd = Command(cmd_argument, cmd_options)
+        assert command.argument.value == expected_cmd.argument.value
+        assert command == expected_cmd
 
     @pytest.mark.parametrize(
         "argument, expected_value",

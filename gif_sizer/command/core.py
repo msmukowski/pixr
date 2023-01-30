@@ -57,7 +57,7 @@ class CmdOptions(BaseModel):
 
     @validator("percentage")
     @classmethod
-    def percentage_valid(cls, value: int) -> None:
+    def percentage_valid(cls, value: int) -> int:
         """Validator to check whether the percentage value is valid"""
 
         def permissible_range(start: int, stop: int):
@@ -65,6 +65,8 @@ class CmdOptions(BaseModel):
 
         if value not in permissible_range(0, 100):
             raise PercentageRangeError(value)
+
+        return value
 
 
 @dataclass
