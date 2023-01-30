@@ -1,7 +1,11 @@
 import pytest
 
 from gif_sizer.command.core import CmdArgument, CmdOptions, Command
-from gif_sizer.command.exceptions import NoSuchArgument, PercentageRangeError
+from gif_sizer.command.exceptions import (
+    NoSuchArgument,
+    PercentageRangeError,
+    TooManyCommandArguments,
+)
 
 ACCEPTED_ARGUMENTS = ["resize", "rescale"]
 
@@ -41,3 +45,7 @@ class TestUnexpectedBehaviour:
     def test_cmd_options_with_corrupted_percentage(self, corrupted_percentage):
         with pytest.raises(PercentageRangeError):
             CmdOptions(**{"verbose": False, "percentage": corrupted_percentage})
+
+    def test_cmd_argument_too_many_arguments(self):
+        with pytest.raises(TooManyCommandArguments):
+            CmdArgument(resize="resize", rescale="rescale")
