@@ -3,6 +3,7 @@ from typing import Any
 import click
 
 from gif_sizer.command.core import Command
+from gif_sizer.runner_factory import RunnerFactory
 
 
 @click.command(help="Resize an animated GIF")
@@ -19,6 +20,7 @@ from gif_sizer.command.core import Command
 )
 def main(argument: str, **kwargs: dict[str, Any]) -> None:
     parsed_command = Command.from_cli(argument, kwargs)
+    runner = RunnerFactory.create_runner(parsed_command)
 
 
 if __name__ == "__main__":
