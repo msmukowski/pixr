@@ -2,6 +2,8 @@ import pytest
 
 from gif_sizer.command.core import CmdArgument, CmdOptions, Command
 from gif_sizer.runner_factory import RunnerFactory
+from gif_sizer.runners.rescale import RescaleRunner
+from gif_sizer.runners.resize import ResizeRunner
 
 
 @pytest.mark.parametrize(
@@ -12,20 +14,20 @@ from gif_sizer.runner_factory import RunnerFactory
                 CmdArgument(**{"resize": "resize"}),
                 CmdOptions(**{"percentage": 50, "verbose": False}),
             ),
-            None,
+            ResizeRunner,
         ),
         (
             Command(
                 CmdArgument(**{"rescale": "rescale"}),
                 CmdOptions(**{"percentage": 50, "verbose": False}),
             ),
-            None,
+            RescaleRunner,
         ),
     ],
 )
 def test_runner_factory(command, expected_runner):
     runner = RunnerFactory.create_runner(command)
-    assert runner == expected_runner
+    assert isinstance(runner, expected_runner)
 
 
 @pytest.mark.parametrize(
