@@ -54,6 +54,7 @@ class CmdArgument(BaseModel):
 class CmdOptions(BaseModel):
     verbose: bool
     percentage: int
+    file_path: str
 
     @validator("percentage")
     @classmethod

@@ -16,6 +16,13 @@ from gif_sizer.runner_factory import RunnerFactory
     type=int,
 )
 @click.option(
+    "--file-path",
+    help="Path to GIF to be processed.",
+    is_flag=False,
+    required=True,
+    type=str,
+)
+@click.option(
     "--verbose", "-v", help="Enable verbose output", is_flag=True, default=False
 )
 def main(argument: str, **kwargs: dict[str, Any]) -> None:
