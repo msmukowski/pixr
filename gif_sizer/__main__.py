@@ -16,10 +16,17 @@ from gif_sizer.runner_factory import RunnerFactory
     type=int,
 )
 @click.option(
-    "--file-path",
+    "--file-path", "-p",
     help="Path to GIF to be processed.",
     is_flag=False,
     required=True,
+    type=str,
+)
+@click.option(
+    "--output-path", "-o",
+    help="Path where the processed GIF will be saved.",
+    is_flag=False,
+    required=False,
     type=str,
 )
 @click.option(
@@ -28,6 +35,7 @@ from gif_sizer.runner_factory import RunnerFactory
 def main(argument: str, **kwargs: dict[str, Any]) -> None:
     parsed_command = Command.from_cli(argument, kwargs)
     runner = RunnerFactory.create_runner(parsed_command)
+    runner.run()
 
 
 if __name__ == "__main__":
