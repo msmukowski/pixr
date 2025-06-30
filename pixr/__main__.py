@@ -6,36 +6,65 @@ from pixr.command.core import Command
 from pixr.runner_factory import RunnerFactory
 
 
-@click.command(help="Resize an animated GIF")
-@click.argument("argument")
+@click.command(help="Process images: resize, rescale, or convert between formats")
+@click.argument("argument", type=click.Choice(['resize', 'rescale', 'convert']))
 @click.option(
     "--percentage",
-    help="Specifies the percentage to which it should be reduced relative to the original GIF",
+    help="Specifies the percentage to which it should be reduced (for resize/rescale operations)",
     is_flag=False,
-    required=True,
+    required=False,
     type=int,
 )
 @click.option(
-    "--file-path", "-p",
-    help="Path to GIF to be processed.",
+    "--file-path",
+    "-p",
+    help="Path to image to be processed.",
     is_flag=False,
     required=True,
     type=str,
 )
 @click.option(
-    "--output-path", "-o",
-    help="Path where the processed GIF will be saved.",
+    "--output-path",
+    "-o",
+    help="Path where the processed image will be saved.",
     is_flag=False,
     required=False,
     type=str,
 )
 @click.option(
-    "--verbose", "-v", help="Enable verbose output", is_flag=True, default=False
+    "--target-format",
+    "-tf",
+    help="Target image format for conversion (required for convert operation)",
+    type=click.Choice(['png', 'jpg', 'jpeg', 'webp', 'bmp', 'tiff', 'gif']),
+    required=False,
 )
+@click.option(
+    "--quality",
+    "-q",
+    help="Output quality for lossy formats (1-100, default: 85)",
+    type=click.IntRange(1, 100),
+    default=85,
+)
+@click.option("--verbose", "-v", help="Enable verbose output", is_flag=True, default=False)
 def main(argument: str, **kwargs: dict[str, Any]) -> None:
-    parsed_command = Command.from_cli(argument, kwargs)
-    runner = RunnerFactory.create_runner(parsed_command)
-    runner.run()
+    if argument in ['resize', 'rescale'] and not kwargs.get('percentage'):
+        raise click.ClickException("--percentage is required for resize and rescale operations")
+
+    if argument == 'convert' and not kwargs.get('target_format'):
+        raise click.ClickException("--target-format is required for convert operation")
+
+    if argument == 'convert' and not kwargs.get('percentage'):
+        kwargs['percentage'] = 50
+
+    try:
+        parsed_command = Command.from_cli(argument, kwargs)
+        runner = RunnerFactory.create_runner(parsed_command)
+        runner.run()
+    except Exception as e:
+        if kwargs.get('verbose'):
+            raise
+        else:
+            raise click.ClickException(str(e))
 
 
 if __name__ == "__main__":

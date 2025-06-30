@@ -7,7 +7,7 @@ from pixr.command.exceptions import (
     TooManyCommandArguments,
 )
 
-ACCEPTED_ARGUMENTS = ["resize", "rescale"]
+ACCEPTED_ARGUMENTS = ["resize", "rescale", "convert"]
 
 
 @pytest.fixture(params=ACCEPTED_ARGUMENTS)
@@ -18,12 +18,12 @@ def cmd_argument(request) -> CmdArgument:
 
 @pytest.fixture(params=range(0 + 1, 100 + 1, 33))
 def cmd_options(request) -> CmdOptions:
-    return CmdOptions(**{"verbose": False, "percentage": request.param})
+    return CmdOptions(**{"verbose": False, "percentage": request.param, "file_path": "/test/path.jpg"})
 
 
 class TestExpectedBehaviour:
     def test_from_cli(self, cmd_argument: CmdArgument, cmd_options: CmdOptions):
-        command = Command.from_cli(cmd_argument.value, cmd_options.dict())
+        command = Command.from_cli(cmd_argument.value, cmd_options.model_dump())
         expected_cmd = Command(cmd_argument, cmd_options)
         assert command.argument.value == expected_cmd.argument.value
         assert command == expected_cmd
@@ -56,7 +56,7 @@ class TestUnexpectedBehaviour:
 
     def test_cmd_options_with_corrupted_percentage(self, corrupted_percentage):
         with pytest.raises(PercentageRangeError):
-            CmdOptions(**{"verbose": False, "percentage": corrupted_percentage})
+            CmdOptions(**{"verbose": False, "percentage": corrupted_percentage, "file_path": "/test/path.jpg"})
 
     def test_cmd_argument_too_many_arguments(self):
         with pytest.raises(TooManyCommandArguments):

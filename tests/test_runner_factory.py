@@ -12,14 +12,14 @@ from pixr.runners.resize import ResizeRunner
         (
             Command(
                 CmdArgument(**{"resize": "resize"}),
-                CmdOptions(**{"percentage": 50, "verbose": False}),
+                CmdOptions(**{"percentage": 50, "verbose": False, "file_path": "/test/path.jpg"}),
             ),
             ResizeRunner,
         ),
         (
             Command(
                 CmdArgument(**{"rescale": "rescale"}),
-                CmdOptions(**{"percentage": 50, "verbose": False}),
+                CmdOptions(**{"percentage": 50, "verbose": False, "file_path": "/test/path.jpg"}),
             ),
             RescaleRunner,
         ),
@@ -36,7 +36,7 @@ def test_runner_factory(command, expected_runner):
         (
             Command(
                 CmdArgument(**{"resize": "test"}),
-                CmdOptions(**{"percentage": 50, "verbose": False}),
+                CmdOptions(**{"percentage": 50, "verbose": False, "file_path": "/test/path.jpg"}),
             ),
             ValueError,
             "Unhandled creation command argument: 'test'!",
