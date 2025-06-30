@@ -17,17 +17,4 @@ pytest = "*"
 coverage = "*"
 
 [requires]
-python_version = "3.9"
-
-[black]
-line-length = 120
-target-version = [ "py39",]
-skip-string-normalization = true
-
-[isort]
-profile = "black"
-line_length = 120
-py_version = 39
-
-[mypy]
-ignore_missing_imports = true
+python_version = "3.12"
