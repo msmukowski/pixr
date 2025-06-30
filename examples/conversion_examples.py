@@ -24,22 +24,25 @@ USAGE_EXAMPLES = """
 2. Convert PNG to WebP with high quality:
    python pixr convert --file-path input.png --target-format webp --quality 95
 
-3. Convert JPEG to PNG (preserve transparency):
+3. Convert JPEG to WebP with aggressive compression:
+   python pixr convert --file-path photo.jpg --target-format webp --quality 70
+
+4. Convert JPEG to PNG (preserve transparency):
    python pixr convert --file-path photo.jpg --target-format png
 
-4. Convert with custom output path:
+5. Convert with custom output path:
    python pixr convert --file-path input.png --target-format webp --output-path /custom/path/output.webp
 
-5. Convert with verbose output:
+6. Convert with verbose output (shows detailed compression info):
    python pixr convert --file-path input.png --target-format webp --verbose
 
 📏 Resize/Rescale Examples:
 ------------------------------
 
-6. Resize image by percentage:
+7. Resize image by percentage:
    python pixr rescale --file-path image.jpg --percentage 50
 
-7. Resize image to specific dimensions:
+8. Resize image to specific dimensions:
    python pixr resize --file-path image.jpg --percentage 75
 
 ✅ Supported Formats:
@@ -53,6 +56,9 @@ USAGE_EXAMPLES = """
    • WebP offers better compression than PNG/JPEG
    • PNG supports transparency, JPEG does not
    • Use --verbose for detailed processing information
+   • PIXR shows file size changes automatically (>5% difference)
+   • If JPEG→WebP doesn't reduce size, try lower --quality (50-80)
+   • High quality JPEGs (>90%) may benefit from lossless WebP
 """
 
 API_EXAMPLES = """
