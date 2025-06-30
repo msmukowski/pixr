@@ -1,9 +1,9 @@
 import pytest
 
-from gif_sizer.command.core import CmdArgument, CmdOptions, Command
-from gif_sizer.runner_factory import RunnerFactory
-from gif_sizer.runners.rescale import RescaleRunner
-from gif_sizer.runners.resize import ResizeRunner
+from pixr.command.core import CmdArgument, CmdOptions, Command
+from pixr.runner_factory import RunnerFactory
+from pixr.runners.rescale import RescaleRunner
+from pixr.runners.resize import ResizeRunner
 
 
 @pytest.mark.parametrize(

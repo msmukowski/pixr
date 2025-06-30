@@ -2,8 +2,8 @@ from typing import Any
 
 import click
 
-from gif_sizer.command.core import Command
-from gif_sizer.runner_factory import RunnerFactory
+from pixr.command.core import Command
+from pixr.runner_factory import RunnerFactory
 
 
 @click.command(help="Resize an animated GIF")

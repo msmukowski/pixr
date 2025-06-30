@@ -1,6 +1,6 @@
-from gif_sizer.command.core import Command
+from pixr.command.core import Command
 
 
-class RescaleRunner:
+class ResizeRunner:
     def __init__(self, command: Command) -> None:
         pass

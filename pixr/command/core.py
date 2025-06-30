@@ -4,7 +4,7 @@ from typing import Any, Optional
 
 from pydantic import BaseModel, root_validator, validator
 
-from gif_sizer.command.exceptions import (
+from pixr.command.exceptions import (
     NoSuchArgument,
     PercentageRangeError,
     TooManyCommandArguments,

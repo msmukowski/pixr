@@ -1,7 +1,7 @@
 import pytest
 
-from gif_sizer.command.core import CmdArgument, CmdOptions, Command
-from gif_sizer.command.exceptions import (
+from pixr.command.core import CmdArgument, CmdOptions, Command
+from pixr.command.exceptions import (
     NoSuchArgument,
     PercentageRangeError,
     TooManyCommandArguments,

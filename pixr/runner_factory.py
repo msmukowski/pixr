@@ -1,6 +1,6 @@
-from gif_sizer.command.core import Command
-from gif_sizer.runners.rescale import RescaleRunner
-from gif_sizer.runners.resize import ResizeRunner
+from pixr.command.core import Command
+from pixr.runners.rescale import RescaleRunner
+from pixr.runners.resize import ResizeRunner
 
 
 class RunnerFactory:
