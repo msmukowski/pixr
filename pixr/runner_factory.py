@@ -7,7 +7,7 @@ from pixr.runners.resize import ResizeRunner
 class RunnerFactory:
     @staticmethod
     def create_runner(command: Command):
-        argument = command.argument.value
+        argument = command.argument
         if argument == "resize":
             return ResizeRunner(command)
         elif argument == "rescale":

@@ -1,17 +1,12 @@
 import pytest
 
-from pixr.command.core import CmdArgument, CmdOptions, Command
+from pixr.command.core import CmdOptions, Command
 from pixr.runner_factory import RunnerFactory
 from pixr.runners.convert import ConvertRunner
 
 
 class TestConvertFunctionality:
     """Test the new convert functionality."""
-    
-    def test_cmd_argument_accepts_convert(self):
-        """Test that CmdArgument accepts 'convert' as a valid argument."""
-        cmd_arg = CmdArgument(convert="convert")
-        assert cmd_arg.value == "convert"
     
     def test_cmd_options_with_convert_parameters(self):
         """Test CmdOptions with conversion-specific parameters."""
@@ -75,7 +70,7 @@ class TestConvertFunctionality:
     def test_runner_factory_creates_convert_runner(self):
         """Test that RunnerFactory creates ConvertRunner for 'convert' command."""
         command = Command(
-            CmdArgument(convert="convert"),
+            "convert",
             CmdOptions(
                 verbose=False,
                 percentage=50,
@@ -100,7 +95,7 @@ class TestConvertFunctionality:
             }
         )
         
-        assert command.argument.value == "convert"
+        assert command.argument == "convert"
         assert command.options.target_format == "webp"
         assert command.options.quality == 90
 
@@ -119,7 +114,7 @@ class TestUpdatedExistingFunctionality:
     def test_all_runners_supported(self, argument_type, expected_runner):
         """Test that all runner types are supported by the factory."""
         command = Command(
-            CmdArgument(**{argument_type: argument_type}),
+            argument_type,
             CmdOptions(
                 verbose=False,
                 percentage=50,

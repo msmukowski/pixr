@@ -1,51 +1,9 @@
 from dataclasses import dataclass
-from functools import cached_property
 from typing import Any, Optional
 
-from pydantic import BaseModel, ConfigDict, field_validator, model_validator
+from pydantic import BaseModel, field_validator
 
-from pixr.command.exceptions import (
-    NoSuchArgument,
-    PercentageRangeError,
-    TooManyCommandArguments,
-)
-
-
-class CmdArgument(BaseModel):
-    resize: Optional[str] = None
-    rescale: Optional[str] = None
-    convert: Optional[str] = None
-
-    model_config = ConfigDict(ignored_types=(cached_property,))
-
-    @model_validator(mode='before')
-    @classmethod
-    def max_one_argument_check(cls, values: dict[str, Any]) -> dict[str, Any]:
-        """Make sure that only one argument was given"""
-        non_none_values = {k: v for k, v in values.items() if v is not None}
-        argument_count = len(non_none_values.keys())
-
-        if argument_count > 1:
-            raise TooManyCommandArguments("A maximum of one command argument is allowed!")
-
-        return values
-
-    @model_validator(mode='before')
-    @classmethod
-    def field_affiliation_valid(cls, values: dict[str, Any]) -> dict[str, Any]:
-        """Make sure that only valid arguments are provided"""
-        valid_arguments = set(cls.model_fields.keys())
-        mismatched_argument = set(values.keys()).difference(valid_arguments)
-
-        if mismatched_argument:
-            raise NoSuchArgument(f"No such argument: '{mismatched_argument}'! Should be one of: {valid_arguments}")
-        return values
-
-    @cached_property
-    def value(self):
-        values = self.model_dump().values()
-        [value] = list(filter(None, values))
-        return value
+from pixr.command.exceptions import PercentageRangeError
 
 
 class CmdOptions(BaseModel):
@@ -93,12 +51,10 @@ class CmdOptions(BaseModel):
 
 @dataclass
 class Command:
-    argument: CmdArgument
+    argument: str
     options: CmdOptions
 
     @classmethod
     def from_cli(cls, argument: str, options: dict[str, Any]) -> "Command":
-        cmd_argument = CmdArgument(**{argument: argument})
         cmd_options = CmdOptions(**options)
-
-        return cls(cmd_argument, cmd_options)
+        return cls(argument, cmd_options)
