@@ -1,34 +1,66 @@
 # PIXR
 
-PIXR is an image processing application that handles various image operations including resizing, type conversion, and more, supporting multiple image formats.
+A modern, command-line tool for fast and efficient image processing.
 
-## Prerequisites
+PIXR provides a suite of tools for common image manipulation tasks, including format conversion, dimension rescaling, and file size optimization. It's designed to be simple, scriptable, and powerful.
 
-- Python 3.7+
-- Pipenv
+## Key Features
 
-## Installing
+- **Convert**: Change image formats between PNG, JPEG, WEBP, and more.
+- **Rescale**: Change the pixel dimensions of an image by a percentage.
+- **Target Size**: Optimize an image's file size to be at or below a specific threshold (e.g., "250KB").
+- **GIF Support**: Correctly handles rescaling animated GIFs, preserving their animations.
 
-1. Clone this repository: `git clone https://github.com/msmukowski/pixr.git`
-2. Install Pipenv: `pip install pipenv`
-3. Navigate to the project directory: `cd pixr`
-4. Install the project dependencies with Pipenv: `pipenv install`
+## Usage
 
-## Running the Application
+PIXR uses a command-group structure. The main commands are:
 
-1. Activate the virtual environment: `pipenv shell`
-2. Run the application with the specified options and flags:
-```python
-python pixr [OPTION...]
+```sh
+pixr --help
+Usage: pixr [OPTIONS] COMMAND [ARGS]...
+
+  A modern, command-line tool for fast and efficient image processing.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  convert      Convert an image from one format to another.
+  rescale      Rescale an image's dimensions by a percentage.
+  target-size  Optimize an image to be at or below a target file size.
 ```
 
-## Configuration
+### Examples
 
-The user can specify the input file name, output directory, and size percentage to resize the image by providing options and flags when running the application (e.g. `python pixr -i my-image.jpg -d my-output-directory -s 50%`).
+#### Convert an image to WEBP format
+
+```sh
+pixr convert --file-path image.png --target-format webp --quality 80
+```
+
+#### Rescale an animated GIF to 50% of its original dimensions
+
+```sh
+pixr rescale --file-path animation.gif --percentage 50 --output-path small_animation.gif
+```
+
+#### Optimize an image to be under 250 Kilobytes
+
+```sh
+pixr target-size --file-path photo.jpg --max-size 250KB
+```
 
 ## Contributing
 
-Please feel free to contribute to this project by submitting a pull request.
+Contributions are welcome! This project uses `pipenv` for dependency management.
+
+To set up for development:
+1. Clone this repository: `git clone https://github.com/msmukowski/pixr.git`
+2. Navigate to the project directory: `cd pixr`
+3. Install dependencies: `pipenv install --dev`
+4. Activate the virtual environment: `pipenv shell`
+
+For more detailed guidelines, please see the `CONTRIBUTING.md` file (coming soon).
 
 ## License
 
