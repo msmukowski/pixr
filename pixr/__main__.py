@@ -6,11 +6,24 @@ from pixr.command.core import Command
 from pixr.runner_factory import RunnerFactory
 
 
-@click.command(help="Process images: resize, rescale, or convert between formats")
-@click.argument("argument", type=click.Choice(['resize', 'rescale', 'convert']))
+@click.command(help="Process images: target-size, rescale, or convert between formats")
+@click.argument("argument", type=click.Choice(['target-size', 'rescale', 'convert']))
+@click.option(
+    "--max-size",
+    help="Specifies the maximum file size (e.g., '500KB', '2MB'). Used with 'target-size'.",
+    is_flag=False,
+    required=False,
+    type=str,
+)
+@click.option(
+    "--wild",
+    help="Prioritize meeting the size target above all else (for 'target-size').",
+    is_flag=True,
+    default=False,
+)
 @click.option(
     "--percentage",
-    help="Specifies the percentage to which it should be reduced (for resize/rescale operations)",
+    help="Specifies the percentage to which it should be reduced (for rescale operation)",
     is_flag=False,
     required=False,
     type=int,
@@ -47,8 +60,11 @@ from pixr.runner_factory import RunnerFactory
 )
 @click.option("--verbose", "-v", help="Enable verbose output", is_flag=True, default=False)
 def main(argument: str, **kwargs: dict[str, Any]) -> None:
-    if argument in ['resize', 'rescale'] and not kwargs.get('percentage'):
-        raise click.ClickException("--percentage is required for resize and rescale operations")
+    if argument == 'rescale' and not kwargs.get('percentage'):
+        raise click.ClickException("--percentage is required for rescale operation")
+
+    if argument == 'target-size' and not kwargs.get('max_size'):
+        raise click.ClickException("--max-size is required for target-size operation")
 
     if argument == 'convert' and not kwargs.get('target_format'):
         raise click.ClickException("--target-format is required for convert operation")

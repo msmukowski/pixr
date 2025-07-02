@@ -8,16 +8,20 @@ from pixr.command.exceptions import PercentageRangeError
 
 class CmdOptions(BaseModel):
     verbose: bool
-    percentage: int
+    percentage: Optional[int] = None
     file_path: str
     output_path: Optional[str] = None
     target_format: Optional[str] = None
     quality: int = 85
+    max_size: Optional[str] = None
+    wild: bool = False
 
     @field_validator("percentage")
     @classmethod
-    def percentage_valid(cls, value: int) -> int:
+    def percentage_valid(cls, value: Optional[int]) -> Optional[int]:
         """Validator to check whether the percentage value is valid"""
+        if value is None:
+            return value
 
         def permissible_range(start: int, stop: int):
             return range(start + 1, stop + 1)
