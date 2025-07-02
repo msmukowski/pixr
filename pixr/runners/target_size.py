@@ -32,6 +32,13 @@ class TargetSizeRunner(BaseRunner):
         wild_mode = self.command.options.wild
 
         with Image.open(input_path) as img:
+            allowed_formats = ['PNG', 'JPEG', 'GIF', 'WEBP']
+            if img.format.upper() not in allowed_formats:
+                raise ValueError(
+                    f"Input file format '{img.format}' is not supported for target-size. "
+                    f"Supported formats are: PNG, JPEG (for .jpg/.jpeg), GIF, WebP."
+                )
+
             if getattr(img, "is_animated", False):
                 raise NotImplementedError("Target size for animated images is not supported.")
 
