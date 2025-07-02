@@ -3,7 +3,7 @@ import pytest
 from pixr.command.core import CmdOptions, Command
 from pixr.runner_factory import RunnerFactory
 from pixr.runners.rescale import RescaleRunner
-from pixr.runners.resize import ResizeRunner
+from pixr.runners.target_size import TargetSizeRunner
 
 
 @pytest.mark.parametrize(
@@ -11,10 +11,10 @@ from pixr.runners.resize import ResizeRunner
     [
         (
             Command(
-                "resize",
-                CmdOptions(percentage=50, verbose=False, file_path="/test/path.jpg"),
+                "target-size",
+                CmdOptions(max_size="1MB", verbose=False, file_path="/test/path.jpg"),
             ),
-            ResizeRunner,
+            TargetSizeRunner,
         ),
         (
             Command(

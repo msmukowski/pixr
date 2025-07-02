@@ -18,7 +18,7 @@ def test_rescale_static_image(static_image_path: Path):
             "verbose": False,
         },
     )
-    
+
     runner = RescaleRunner(command)
     runner.run()
 
@@ -42,7 +42,7 @@ def test_rescale_animated_gif(animated_gif_path: Path):
             "verbose": False,
         },
     )
-    
+
     runner = RescaleRunner(command)
     runner.run()
 
@@ -56,4 +56,4 @@ def test_rescale_animated_gif(animated_gif_path: Path):
         assert img.n_frames == 3
 
         frame_dims = [(frame.width, frame.height) for frame in ImageSequence.Iterator(img)]
-        assert all(dim == (25, 20) for dim in frame_dims) 
+        assert all(dim == (25, 20) for dim in frame_dims)
