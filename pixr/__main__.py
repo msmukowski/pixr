@@ -6,8 +6,8 @@ from pixr.command.core import Command
 from pixr.runner_factory import RunnerFactory
 
 
-@click.command(help="Process images: target-size, rescale, or convert between formats")
-@click.argument("argument", type=click.Choice(['target-size', 'rescale', 'convert']))
+@click.command(help="Process images: target-size, rescale, convert between formats, or anonymize (remove metadata)")
+@click.argument("argument", type=click.Choice(['target-size', 'rescale', 'convert', 'anonymize']))
 @click.option(
     "--max-size",
     help="Specifies the maximum file size (e.g., '500KB', '2MB'). Used with 'target-size'.",
