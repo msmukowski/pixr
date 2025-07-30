@@ -15,4 +15,4 @@ class AnonymizeRunner(BaseRunner):
         if purify_image(input_path, output_path):
             print(f"Successfully anonymized {input_path} -> {output_path}")
         else:
-            print(f"Failed to anonymize {input_path}") 
+            print(f"Failed to anonymize {input_path}")

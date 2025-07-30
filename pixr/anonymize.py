@@ -34,4 +34,4 @@ def purify_image(input_path: Path, output_path: Path) -> bool:
         return False
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
-        return False 
+        return False
