@@ -22,7 +22,7 @@ def test_target_size_success(run_pixr, image_file_factory):
     target_size_kb = 50
     target_size_str = f"{target_size_kb}KB"
 
-    result = run_pixr(["target-size", "--file-path", str(input_file), "--max-size", target_size_str])
+    result = run_pixr(["target-size", str(input_file), "--max-size", target_size_str])
 
     assert output_file.exists()
     assert "✓ Target size achieved" in result.stdout
@@ -43,7 +43,7 @@ def test_target_size_partial_success_quality_floor(run_pixr, image_file_factory)
     target_size_kb = 10
     target_size_str = f"{target_size_kb}KB"
 
-    result = run_pixr(["target-size", "--file-path", str(input_file), "--max-size", target_size_str])
+    result = run_pixr(["target-size", str(input_file), "--max-size", target_size_str])
 
     assert output_file.exists()
     assert "ℹ️ Could not meet target" in result.stdout
@@ -64,7 +64,7 @@ def test_target_size_wild_mode(run_pixr, image_file_factory):
     target_size_kb = 10
     target_size_str = f"{target_size_kb}KB"
 
-    result = run_pixr(["target-size", "--file-path", str(input_file), "--max-size", target_size_str, "--wild"])
+    result = run_pixr(["target-size", str(input_file), "--max-size", target_size_str, "--wild"])
 
     assert output_file.exists()
     assert "✓ Target size achieved" in result.stdout
@@ -82,6 +82,6 @@ def test_target_size_unsupported_format(run_pixr, image_file_factory):
     input_file: Path = image_file_factory("test_unsupported.tiff", size=(100, 100), fmt="TIFF")
 
     with pytest.raises(subprocess.CalledProcessError) as excinfo:
-        run_pixr(["target-size", "--file-path", str(input_file), "--max-size", "10KB"])
+        run_pixr(["target-size", str(input_file), "--max-size", "10KB"])
 
     assert "Input file format 'TIFF' is not supported" in excinfo.value.stderr
