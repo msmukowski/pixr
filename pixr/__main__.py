@@ -23,7 +23,12 @@ def run_command(argument: str, options: dict):
 @click.argument("output_path", type=click.Path(), required=False)
 def anonymize_command(verbose: bool, file_path: str, output_path: Optional[str]):
     """Anonymize an image by removing its metadata."""
-    run_command("anonymize", locals())
+    options = {
+        "verbose": verbose,
+        "file_path": file_path,
+        "output_path": output_path,
+    }
+    run_command("anonymize", options)
 
 
 @cli.command(name="rescale", help="Rescale an image by a percentage.")
@@ -33,7 +38,13 @@ def anonymize_command(verbose: bool, file_path: str, output_path: Optional[str])
 @click.argument("output_path", type=click.Path(), required=False)
 def rescale_command(percentage: int, verbose: bool, file_path: str, output_path: Optional[str]):
     """Rescale an image to a new size based on a percentage."""
-    run_command("rescale", locals())
+    options = {
+        "percentage": percentage,
+        "verbose": verbose,
+        "file_path": file_path,
+        "output_path": output_path,
+    }
+    run_command("rescale", options)
 
 
 @cli.command(name="convert", help="Convert an image to a different format.")
@@ -44,7 +55,14 @@ def rescale_command(percentage: int, verbose: bool, file_path: str, output_path:
 @click.argument("output_path", type=click.Path(), required=False)
 def convert_command(target_format: str, quality: int, verbose: bool, file_path: str, output_path: Optional[str]):
     """Convert an image from one format to another."""
-    run_command("convert", locals())
+    options = {
+        "target_format": target_format,
+        "quality": quality,
+        "verbose": verbose,
+        "file_path": file_path,
+        "output_path": output_path,
+    }
+    run_command("convert", options)
 
 
 @cli.command(name="target-size", help="Resize an image to a target size.")
@@ -55,7 +73,14 @@ def convert_command(target_format: str, quality: int, verbose: bool, file_path: 
 @click.argument("output_path", type=click.Path(), required=False)
 def target_size_command(max_size: str, wild: bool, verbose: bool, file_path: str, output_path: Optional[str]):
     """Resize an image to meet a target file size."""
-    run_command("target-size", locals())
+    options = {
+        "max_size": max_size,
+        "wild": wild,
+        "verbose": verbose,
+        "file_path": file_path,
+        "output_path": output_path,
+    }
+    run_command("target-size", options)
 
 
 if __name__ == "__main__":
