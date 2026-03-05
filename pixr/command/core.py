@@ -4,6 +4,7 @@ from typing import Any, Optional
 from pydantic import BaseModel, field_validator
 
 from pixr.command.exceptions import PercentageRangeError
+from pixr.formats import SUPPORTED_FORMATS
 
 
 class CmdOptions(BaseModel):
@@ -46,9 +47,10 @@ class CmdOptions(BaseModel):
         if value is None:
             return value
 
-        supported_formats = {'png', 'jpg', 'jpeg', 'webp', 'bmp', 'tiff', 'gif'}
-        if value.lower() not in supported_formats:
-            raise ValueError(f"Unsupported target format '{value}'. Supported: {', '.join(supported_formats)}")
+        if value.lower() not in SUPPORTED_FORMATS:
+            raise ValueError(
+                f"Unsupported target format '{value}'. Supported: {', '.join(SUPPORTED_FORMATS.keys())}"
+            )
 
         return value.lower()
 

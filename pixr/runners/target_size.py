@@ -1,5 +1,6 @@
 from PIL import Image
 
+from pixr.formats import TARGET_SIZE_FORMATS
 from pixr.runners import BaseRunner
 from pixr.strategies.factory import StrategyFactory
 from pixr.utils import parse_size
@@ -18,11 +19,10 @@ class TargetSizeRunner(BaseRunner):
         wild_mode = self.command.options.wild
 
         with Image.open(input_path) as img:
-            allowed_formats = ['PNG', 'JPEG', 'GIF', 'WEBP']
-            if img.format.upper() not in allowed_formats:
+            if img.format.upper() not in TARGET_SIZE_FORMATS:
                 raise ValueError(
                     f"Input file format '{img.format}' is not supported for target-size. "
-                    f"Supported formats are: {', '.join(allowed_formats)}."
+                    f"Supported formats are: {', '.join(sorted(TARGET_SIZE_FORMATS))}."
                 )
 
             if getattr(img, "is_animated", False) and img.format.upper() != 'GIF':

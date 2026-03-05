@@ -3,30 +3,23 @@ from typing import Optional
 
 from PIL import Image
 
+from pixr.formats import SUPPORTED_FORMATS
 from pixr.runners import BaseRunner
 
 
 class ConvertRunner(BaseRunner):
     """Runner for converting between image formats."""
 
-    SUPPORTED_FORMATS = {
-        'png': 'PNG',
-        'jpg': 'JPEG',
-        'jpeg': 'JPEG',
-        'webp': 'WEBP',
-        'bmp': 'BMP',
-        'tiff': 'TIFF',
-        'gif': 'GIF',
-    }
-
     def run(self) -> None:
         """Convert image from one format to another."""
         input_path = self._validate_input_file()
 
-        target_format = self._get_target_format()
-        quality = self._get_quality()
+        target_format = self.command.options.target_format
+        if not target_format:
+            raise ValueError("Target format is required for conversion")
+        quality = self.command.options.quality
 
-        output_path = self._determine_output_path(suffix=f"_converted", extension=f".{target_format.lower()}")
+        output_path = self._determine_output_path(suffix="_converted", extension=f".{target_format}")
 
         original_size = input_path.stat().st_size
 
@@ -34,23 +27,6 @@ class ConvertRunner(BaseRunner):
 
         converted_size = output_path.stat().st_size
         self._report_conversion_results(input_path, output_path, original_size, converted_size)
-
-    def _get_target_format(self) -> str:
-        """Get and validate the target format."""
-        target_format = getattr(self.command.options, 'target_format', None)
-
-        if not target_format:
-            raise ValueError("Target format is required for conversion")
-
-        if target_format.lower() not in self.SUPPORTED_FORMATS:
-            supported = ', '.join(self.SUPPORTED_FORMATS.keys())
-            raise ValueError(f"Unsupported target format '{target_format}'. Supported: {supported}")
-
-        return target_format.lower()
-
-    def _get_quality(self) -> Optional[int]:
-        """Get quality setting for lossy formats."""
-        return getattr(self.command.options, 'quality', 85)
 
     def _detect_source_format(self, image_path: Path) -> str:
         """Detect the format of the source image."""
@@ -73,7 +49,7 @@ class ConvertRunner(BaseRunner):
                     img = background
 
                 save_kwargs = {}
-                pil_format = self.SUPPORTED_FORMATS[target_format]
+                pil_format = SUPPORTED_FORMATS[target_format]
 
                 if target_format in ['jpeg', 'jpg', 'webp']:
                     save_kwargs['quality'] = quality
