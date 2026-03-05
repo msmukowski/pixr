@@ -1,7 +1,9 @@
 import click
+from pydantic import ValidationError
 from typing import Optional
 
 from pixr.command.core import Command
+from pixr.command.exceptions import PixrError
 from pixr.runner_factory import RunnerFactory
 
 
@@ -15,9 +17,22 @@ main = cli
 
 
 def run_command(argument: str, options: dict):
-    command = Command.from_cli(argument, options)
-    runner = RunnerFactory.create_runner(command)
-    runner.run()
+    verbose = options.get('verbose', False)
+    try:
+        command = Command.from_cli(argument, options)
+        runner = RunnerFactory.create_runner(command)
+        runner.run()
+    except ValidationError as e:
+        msg = e.errors()[0]['msg']
+        if msg.startswith('Value error, '):
+            msg = msg.removeprefix('Value error, ')
+        raise click.ClickException(msg)
+    except (FileNotFoundError, ValueError, NotImplementedError, PixrError) as e:
+        raise click.ClickException(str(e))
+    except Exception as e:
+        if verbose:
+            raise
+        raise click.ClickException(f'Unexpected error: {e}')
 
 
 @cli.command(name="anonymize", help="Remove metadata from an image.")

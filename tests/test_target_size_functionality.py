@@ -79,4 +79,4 @@ def test_target_size_unsupported_format(cli_runner, image_file_factory):
     result = cli_runner.invoke(cli, ["target-size", str(input_file), "--max-size", "10KB"])
 
     assert result.exit_code != 0
-    assert "Input file format 'TIFF' is not supported" in (result.output + str(result.exception))
+    assert "Input file format 'TIFF' is not supported" in result.output
