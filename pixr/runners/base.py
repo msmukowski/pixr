@@ -32,7 +32,7 @@ class BaseRunner(ABC):
         """Determine the output file path based on input path and options."""
         input_path = Path(self.command.options.file_path)
 
-        output_path_option = getattr(self.command.options, 'output_path', None)
+        output_path_option = self.command.options.output_path
 
         if output_path_option:
             return Path(output_path_option)
