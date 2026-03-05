@@ -11,6 +11,9 @@ def cli():
     pass
 
 
+main = cli
+
+
 def run_command(argument: str, options: dict):
     command = Command.from_cli(argument, options)
     runner = RunnerFactory.create_runner(command)
