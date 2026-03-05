@@ -1,5 +1,3 @@
-import os
-from pathlib import Path
 from pixr.anonymize import purify_image
 from pixr.runners.base import BaseRunner
 
