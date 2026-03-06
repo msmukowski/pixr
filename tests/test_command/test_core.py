@@ -1,9 +1,9 @@
 import pytest
 
-from pixr.command.core import CmdOptions, Command
-from pixr.command.exceptions import PercentageRangeError
+from pixr.command.core import CmdOptions, Command, CommandType
+from pixr.command.exceptions import NoSuchArgument, PercentageRangeError
 
-ACCEPTED_ARGUMENTS = ["resize", "rescale", "convert"]
+ACCEPTED_ARGUMENTS = ["rescale", "convert", "anonymize"]
 
 
 @pytest.fixture(params=ACCEPTED_ARGUMENTS)
@@ -19,9 +19,13 @@ def cmd_options(request) -> CmdOptions:
 class TestCommandCore:
     def test_from_cli(self, argument: str, cmd_options: CmdOptions):
         command = Command.from_cli(argument, cmd_options.model_dump())
-        expected_cmd = Command(argument, cmd_options)
+        expected_cmd = Command(CommandType(argument), cmd_options)
         assert command.argument == expected_cmd.argument
         assert command == expected_cmd
+
+    def test_from_cli_unknown_argument_raises(self):
+        with pytest.raises(NoSuchArgument, match="Unknown command: 'nonexistent'"):
+            Command.from_cli("nonexistent", {"verbose": False, "file_path": "/test/path.jpg"})
 
     @pytest.mark.parametrize("corrupted_percentage", [0, 101])
     def test_cmd_options_with_corrupted_percentage(self, corrupted_percentage: int):

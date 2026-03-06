@@ -1,10 +1,18 @@
 from dataclasses import dataclass
+from enum import Enum
 from typing import Any, Optional
 
 from pydantic import BaseModel, field_validator
 
-from pixr.command.exceptions import PercentageRangeError
+from pixr.command.exceptions import NoSuchArgument, PercentageRangeError
 from pixr.formats import SUPPORTED_FORMATS
+
+
+class CommandType(Enum):
+    CONVERT = 'convert'
+    RESCALE = 'rescale'
+    TARGET_SIZE = 'target-size'
+    ANONYMIZE = 'anonymize'
 
 
 class CmdOptions(BaseModel):
@@ -57,10 +65,14 @@ class CmdOptions(BaseModel):
 
 @dataclass
 class Command:
-    argument: str
+    argument: CommandType
     options: CmdOptions
 
     @classmethod
     def from_cli(cls, argument: str, options: dict[str, Any]) -> "Command":
+        try:
+            cmd_type = CommandType(argument)
+        except ValueError:
+            raise NoSuchArgument(f"Unknown command: '{argument}'")
         cmd_options = CmdOptions(**options)
-        return cls(argument, cmd_options)
+        return cls(cmd_type, cmd_options)

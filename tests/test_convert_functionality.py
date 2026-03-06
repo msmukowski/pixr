@@ -1,6 +1,6 @@
 import pytest
 
-from pixr.command.core import CmdOptions, Command
+from pixr.command.core import CmdOptions, Command, CommandType
 from pixr.runner_factory import RunnerFactory
 from pixr.runners.convert import ConvertRunner
 
@@ -40,7 +40,8 @@ class TestConvertFunctionality:
     def test_runner_factory_creates_convert_runner(self):
         """Test that RunnerFactory creates ConvertRunner for 'convert' command."""
         command = Command(
-            "convert", CmdOptions(verbose=False, percentage=50, file_path="/path/to/input.png", target_format="webp")
+            CommandType.CONVERT,
+            CmdOptions(verbose=False, percentage=50, file_path="/path/to/input.png", target_format="webp"),
         )
 
         runner = RunnerFactory.create_runner(command)
@@ -59,6 +60,6 @@ class TestConvertFunctionality:
             },
         )
 
-        assert command.argument == "convert"
+        assert command.argument == CommandType.CONVERT
         assert command.options.target_format == "webp"
         assert command.options.quality == 90
